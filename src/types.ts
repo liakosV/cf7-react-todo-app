@@ -1,20 +1,18 @@
 export type TodoProps = {
     id: number;
     text: string;
+    completed: boolean;
 }
 
 export type Action =
     | {type: "ADD"; payload: string}
     | {type: "DELETE"; payload: string}
-    | {type: "EDIT"; payload: {id: number, newText: string} };
+    | {type: "EDIT"; payload: {id: number, newText: string} }
+    | {type: "COMPLETE"; payload: number }
 
-export type Todo = {
-    id: number;
-    text: string;
-}
 
 export type TodoListProps = {
-    todos: Todo[];
+    todos: TodoProps[];
     dispatch: React.Dispatch<Action>
 }
 
