@@ -1,10 +1,11 @@
+import Todo from "./components/Todo.tsx";
 
 
 function App() {
 
   return (
     <>
-
+      <Todo/>
     </>
   )
 }

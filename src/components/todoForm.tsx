@@ -1,12 +1,5 @@
 import {useState} from "react";
-
-type Action =
-    | {type: "ADD"; payload: string}
-    | {type: "DELETE"; payload: string}
-
-type todoFormProps = {
-    dispatch: React.Dispatch<Action>,
-}
+import type {todoFormProps} from "../types.ts";
 
 const TodoForm = ({dispatch}: todoFormProps) => {
     const [text, setText] = useState("");
