@@ -1,10 +1,29 @@
-import {Trash2} from "lucide-react";
+import {Edit, Save, Trash2, X} from "lucide-react";
 import type {TodoListProps} from "../types.ts";
+import {useState} from "react";
 
 const TodoList = ({todos, dispatch}: TodoListProps) =>{
+    const [editId, setEditId] = useState<number | null>(null);
+    const [editText, setEditText] = useState<string | null>(null);
 
     const handleDelete = (id: number) => () => {
         dispatch({type: "DELETE", payload: id});
+    }
+
+    const handleEdit = (id: number, text: string) => () => {
+        setEditId(id);
+        setEditText(text);
+    }
+
+    const handleCancel = () => () => {
+        setEditId(null);
+        setEditText("");
+    }
+
+    const handleSave = (id: number) => () =>{
+        dispatch({type: "EDIT", payload: {id, newText: editText}})
+        setEditId(null);
+        setEditText("");
     }
 
     return (
@@ -12,14 +31,52 @@ const TodoList = ({todos, dispatch}: TodoListProps) =>{
             <ul className="space-y-2">
                 {todos.map(todo => (
                     <li key={todo.id} className="flex items-center justify-between bg-gray-100 p-2 rounded">
-                        <span>{todo.text}</span>
-                        <button
-                            onClick={handleDelete(todo.id)}
-                            className="text-cf-dark-red"
-                        >
-                            {/*Delete*/}
-                            <Trash2 size={18}/>
-                        </button>
+                        { editId === todo.id ? (
+                            <>
+                                <div className="flex-1 gap-2">
+                                    <input
+                                        type="text"
+                                        value={editText}
+                                        onChange={(e) => setEditText(e.target.value)}
+                                        className="flex border rounded p-1"
+                                    />
+                                </div>
+                                <div className="flex gap-2">
+                                    <button
+                                        className="text-cf-dark-gray"
+                                        onClick={handleSave(todo.id)}
+                                    >
+                                        <Save size={18}/>
+                                    </button>
+                                    <button
+                                        onClick={handleCancel()}
+                                        className="text-cf-dark-red"
+                                    >
+                                        <X size={18}/>
+                                    </button>
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <span>{todo.text}</span>
+                                <div className="flex gap-2">
+                                    <button
+                                        className="text-cf-dark-gray"
+                                        onClick={handleEdit(todo.id, todo.text)}
+                                    >
+                                        <Edit size={18}/>
+                                    </button>
+                                    <button
+                                        onClick={handleDelete(todo.id)}
+                                        className="text-cf-dark-red"
+                                    >
+                                        <Trash2 size={18}/>
+                                    </button>
+                                </div>
+                            </>
+                        )
+
+                        }
                     </li>
                 ))}
             </ul>
